@@ -132,6 +132,10 @@ class FacturaController extends Controller {
                     )
                         
                     )
+                    ->add('ctaContable','interger',array(
+                        'label'=>'Cuenta Contable',
+                        'required' => true,
+                    ))
                     ->add('totalSinImpuestos', 'text', array(
                         'label'=>'Valor',
                         'required' => true,
@@ -175,6 +179,7 @@ class FacturaController extends Controller {
 
         $em = $this->getDoctrine()
         ->getRepository(Factura::class)->find($id);
+        
 
         //$entity = $em->getRepository(Factura::class)->find($id);
         
@@ -187,6 +192,14 @@ class FacturaController extends Controller {
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
+        $form = $this->createForm(FacturaType::class, $entity, array(
+            'action' => $this->generateUrl('factura_edit', array('id' => $entity->getId())),
+            'method' => 'PUT',
+        ));
+
+        $form->add('submit', 'submit', array('label' => 'Update'));
+
+        return $form;
     }
               
     

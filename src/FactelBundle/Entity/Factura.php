@@ -211,6 +211,13 @@ class Factura {
     protected $valorTotal;
     
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     */
+    protected $ctaContable;
+
+    /**
      * @var float
      *
      * @ORM\Column(name="monto", type="decimal", scale=2)
@@ -774,6 +781,27 @@ class Factura {
      */
     public function getValorTotal() {
         return $this->valorTotal;
+    }
+
+    /**
+     * Set ctaContable
+     *
+     * @param integer $ctaContable
+     * @return Factura
+     */
+    public function setCtaContable($ctaContable) {
+        $this->ctaContable = $ctaContable;
+
+        return $this;
+    }
+
+    /**
+     * Get ctaContable
+     *
+     * @return integer 
+     */
+    public function getCtaContable() {
+        return $this->ctaContable;
     }
 
     /**

@@ -209,6 +209,34 @@ class Factura {
      * @ORM\Column(name="valorTotal", type="decimal", scale=2)
      */
     protected $valorTotal;
+    
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="monto", type="decimal", scale=2)
+     */
+    protected $monto;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="abono", type="decimal", scale=2)
+     */
+    protected $abono;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="saldo", type="decimal", scale=2)
+     */
+    protected $saldo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="estadoCuenta", type="string", length=30, nullable=true)
+     */
+    protected $estadoCuenta;
 
     /**
      * @ORM\Column(name="firmado", type="boolean")
@@ -738,6 +766,7 @@ class Factura {
         return $this;
     }
 
+
     /**
      * Get valorTotal
      *
@@ -745,6 +774,93 @@ class Factura {
      */
     public function getValorTotal() {
         return $this->valorTotal;
+    }
+
+    /**
+     * Set monto
+     *
+     * @param float $monto
+     * @return Factura
+     */
+    public function setMonto($monto) {
+        $this->monto = $monto;
+
+        return $this;
+    }
+    
+
+    /**
+     * Get monto
+     *
+     * @return float 
+     */
+    public function getMonto() {
+        return $this->monto;
+    }
+
+    /**
+     * Set abono
+     *
+     * @param float $abono
+     * @return Factura
+     */
+    public function setAbono($abono) {
+        $this->abono = $abono;
+
+        return $this;
+    }
+    
+
+    /**
+     * Get abono
+     *
+     * @return float 
+     */
+    public function getAbono() {
+        return $this->abono;
+    }
+
+    /**
+     * Set saldo
+     *
+     * @param float $saldo
+     * @return Factura
+     */
+    public function setSaldo($saldo) {
+        $this->saldo = $saldo;
+
+        return $this;
+    }
+    
+
+    /**
+     * Get saldo
+     *
+     * @return float 
+     */
+    public function getSaldo() {
+        return $this->saldo;
+    }
+    /**
+     * Set estadoCuenta
+     *
+     * @param string $estadoCuenta
+     * @return Factura
+     */
+    public function setEstadoCuenta($estadoCuenta) {
+        $this->estadoCuenta = $estadoCuenta;
+
+        return $this;
+    }
+    
+
+    /**
+     * Get estadoCuenta 
+     *
+     * @return string 
+     */
+    public function getEstadoCuenta() {
+        return $this->estadoCuenta;
     }
 
     /**

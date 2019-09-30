@@ -40,6 +40,30 @@ class FacturaRepository extends EntityRepository {
 
         return $qb->getQuery()->getOneOrNullResult();
     }
+
+    public function editarCuentas($id) {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+        $qb->update("FactelBundle:Factura", "factura")
+                ->set('factura.monto", :monto')
+                ->set('factura.abono", :abono')
+                ->set('factura.saldo", :monto')
+                ->where('factura.id = :id')
+                ->setParameter('id', $id);
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    public function deleteCuentas($id) {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+        $qb->delete()
+                ->from("FactelBundle:Factura", "factura")
+                ->where('factura.id = :id')
+                ->setParameter('id', $id);
+
+        return $qb->getQuery()->getResult();
+    }
     
 
     public function cargarCuentas($search, $start, $limit, $idPtoEmision, $idEmisor, $soloAutorizadas = false){
@@ -277,6 +301,9 @@ class FacturaRepository extends EntityRepository {
                     )
                     ->orWhere(
                             $qb->expr()->like('cliente.identificacion', $qb->expr()->literal('%' . $search . '%'))
+                    ->orWhere(
+                            $qb->expr()->like('emisor.ruc', $qb->expr()->literal('%' . $search . '%'))
+                    )
             );
         }
 

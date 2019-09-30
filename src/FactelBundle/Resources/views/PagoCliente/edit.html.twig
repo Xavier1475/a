@@ -1,0 +1,99 @@
+{% extends "FactelBundle::Layout.html.twig" %}
+
+{% block css %}
+<!-- DataTables CSS -->
+<link href="{{asset('recursos/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css')}}" rel="stylesheet">
+<!-- DataTables Responsive CSS -->
+<link href="{{asset('recursos/bower_components/datatables-responsive/css/dataTables.responsive.css')}}" rel="stylesheet">
+{% endblock %}
+{% block panel_title %}
+<i class="fa fa-bar-chart-o fa-fw"></i> Editar Cuentas
+
+<div class="pull-right">
+    <a href="{{ path('factura_new') }}">
+        <button class="btn btn-primary link-boton">
+            <i class="fa fa-plus-circle"></i>
+            Nueva
+        </button>
+    </a>
+    
+</div>
+{% endblock %}
+{% block content %}
+{{id}}
+{{form_start(form)}}
+
+<div class="col-lg-4 ">
+        <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-4 col-form-label" style="margin-top: 0.7rem;">Cliente</label>
+            <div class="col-sm-8">
+                {{form_widget(form.cliente)}}
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="row" style="margin-top:10rem">
+    <div class="col-lg-4 chtm">
+        <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-4 col-form-label" style="margin-top: 0.9rem;">Forma pago</label>
+            <div class="col-sm-8">
+                {{form_widget(form.formaPago)}}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 vistaw chtm">
+        <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-4 col-form-label" style="margin-top: 0.7rem;">Nro Tarjeta</label>
+            <div class="col-sm-8">
+                {{form_widget(form.secuencial)}}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 chtm">
+        <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-2 col-form-label" style="margin-top: 0.7rem;">Valor</label>
+            <div class="col-sm-10">
+                {{form_widget(form.totalSinImpuestos)}}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 chtm">
+        <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-4 col-form-label" style="margin-top: 0.7rem;">Descuento</label>
+            <div class="col-sm-8">
+                {{form_widget(form.totalDescuento)}}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" style="margin-top:2rem">
+    <div class="col-lg-4 vista chtm">
+        <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-4 col-form-label" style="margin-top: 0.7rem;">Cuenta Contable</label>
+            <div class="col-sm-8">
+                {{form_widget(form.ctaContable)}}
+            </div>
+        </div>
+    </div>
+        <div class="col-lg-4  ban chtm">
+        <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-4 col-form-label" style="margin-top: 0.7rem;">Banco</label>
+            <div class="col-sm-8">
+              {{form_widget(form.banco)}}
+            </div>
+        </div>
+    </div>
+     <div class="col-lg-4 chtm">
+        <div class="form-group row">
+            <div class="col-sm-10">
+               {{form_row(form.Actualizar)}}
+            </div>
+        </div>
+    </div>
+</div>
+
+{{form_end(form)}}
+{% endblock %}

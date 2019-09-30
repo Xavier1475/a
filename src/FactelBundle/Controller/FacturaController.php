@@ -15,7 +15,7 @@ use FactelBundle\Entity\FacturaHasProducto;
 use FactelBundle\Entity\Impuesto;
 use FactelBundle\Entity\CampoAdicional;
 use FactelBundle\Form\FacturaType;
-use FactelBundle\Form\CxCobrarType;
+use FactelBundle\Form\ClienteType;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use Symfony\Component\HttpFoundation\Response;
 use FactelBundle\Util;
@@ -113,8 +113,13 @@ class FacturaController extends Controller {
                             '9'=>'DANNY CEDEÑO'
                     )
                         ])
-                    
-                    
+                    /*
+                    ->add('nombre','entity',array(
+                        'class'=> Cliente::class,
+                        'placeholder'=>'',
+                        'choices'=>$cliente
+                    ))*/
+
                     ->add('formaPago', 'choice', array(
                         'label'=>'Formas de Pago',
                         'choices' => array(
@@ -132,7 +137,16 @@ class FacturaController extends Controller {
                     )
                         
                     )
-                    ->add('ctaContable','interger',array(
+                    ->add('banco','text',array(
+                        'label'=>'Banco',
+                        'required' => true,
+                    ))   
+
+                    ->add('ctaContable','text',array(
+                        'label'=>'Cuenta Contable',
+                        'required' => true,
+                    ))
+                    ->add('ctaContable','text',array(
                         'label'=>'Cuenta Contable',
                         'required' => true,
                     ))
@@ -176,7 +190,7 @@ class FacturaController extends Controller {
     public function editForm($id)
     
     {
-
+        /*
         $em = $this->getDoctrine()
         ->getRepository(Factura::class)->find($id);
         
@@ -199,21 +213,106 @@ class FacturaController extends Controller {
 
         $form->add('submit', 'submit', array('label' => 'Update'));
 
-        return $form;
+        return $form;*/
+               
+        $usu= new Factura();
+        
+        $form= $this->createFormBuilder($usu)
+                    //->setAction($this->generateUrl('save_animal'))
+                    ->add('cliente', 'choice',[
+                        'label'=>'Cliente',
+                        'choices' => array(
+                            '9'=>'DANNY CEDEÑO'
+                    )
+                        ])
+                    
+                    
+                    ->add('formaPago', 'choice', array(
+                        'label'=>'Formas de Pago',
+                        'choices' => array(
+                            '1'=>'Efectivo',
+                            '2'=>'Deposito',
+                            '3'=>'Cheque',
+                            '4'=>'Transferencia',
+                            '5'=>'Tarjeta de Credito',
+                            '6'=>'Otro'
+                    )))
+                    ->add('secuencial', 'text', array(
+                        'label' => 'Nro tarjeta',
+                        'required' => true,
+                        
+                    )
+                        
+                    )
+                    ->add('banco','text',array(
+                        'label'=>'Banco',
+                        'required' => true,
+                    ))   
+
+                    ->add('ctaContable','text',array(
+                        'label'=>'Cuenta Contable',
+                        'required' => true,
+                    ))
+                    ->add('ctaContable','text',array(
+                        'label'=>'Cuenta Contable',
+                        'required' => true,
+                    ))
+                    ->add('totalSinImpuestos', 'text', array(
+                        'label'=>'Valor',
+                        'required' => true,
+                        'post_max_size_message'=>'6'
+                        
+                        )
+                         
+                    )
+                    ->add('totalDescuento', 'text', array(
+                        'label'=>'Descuento',
+                        
+                    ))
+
+                    ->add('Actualizar','submit')
+                    
+                    ->getForm();
+                    //Cargar doctrine
+               $doctrine = $this->getDoctrine();
+               //Cargar entityManager
+               $em = $doctrine->getManager();
+               //CArgar el repositorio
+               $lista = $em->getRepository(Factura::class);
+               //Conseguir campo
+               $animal=$lista->find($id);
+               if(!$animal){
+                $m="El usuario no existe";
+                }else{
+                 
+                    $em->persist($animal);
+                    
+                    -$em->flush();
+                    $m="Datos Modificados";
+                }
+                    /*$personas = $this->getDoctrine()
+                    ->getRepository(Factura::class)
+                    ->findAll();*/
+                    return $this->render(
+                        'FactelBundle:PagoCliente:edit.html.twig',array(
+                            'form' => $form->createView(),
+                            
+                            'id'=>$id
+                        ));
     }
               
     
     /**
      * Lists all Factura entities.
      *
-     * @Route("/pagocli/deleteform", name="flormu")
+     * @Route("/pagocli/{id}/deleteform", name="flormu")
      * @Secure(roles="ROLE_ADMIN, ROLE_EMISOR_ADMIN")
      * @Method("GET")
      * @Template()
      */
     
-    public function formularioPagos($id){
-       $em = $this->getDoctrine()->getManager();
+    public function formularioPagos(Factura $id){
+       /*$em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('FactelBundle:Establecimiento')->findCuentasId($id);
 
@@ -228,7 +327,26 @@ class FacturaController extends Controller {
             'entity' => $entity
             ,
             'delete_form' => $deleteForm->createView(),
-        ));
+        ));*/
+        $doctrine = $this->getDoctrine();
+        //Cargar entityManager
+        $em = $doctrine->getManager();
+        //CArgar el repositorio
+
+        if($id && is_object($id)){
+            $em->remove($id);
+            $em->flush();
+            $m="<script>alert('Cta Borrada exitosamente')</script>";
+
+            
+        }else{
+            $m="<script>alert('No se pudo borrar la Cta')</script>";
+
+        }
+        
+        
+        return $this->redirect($this->generateUrl('pago'));
+        
 
         }
  
@@ -240,6 +358,8 @@ class FacturaController extends Controller {
      * @Method("GET")
      */
     public function facturasAction() {
+        $iDisplayStart="";
+        $iDisplayLength="";
         if (isset($_GET['sEcho'])) {
             $sEcho = $_GET['sEcho'];
         }
@@ -274,7 +394,7 @@ class FacturaController extends Controller {
         foreach ($entities as $entity) {
             $fechaAutorizacion = "";
             $fechaAutorizacion = $entity->getFechaAutorizacion() != null ? $entity->getFechaAutorizacion()->format("d/m/Y H:i:s") : "";
-            $facturaArray[$i] = [$entity->getId(), $entity->getEstablecimiento()->getCodigo() . "-" . $entity->getPtoEmision()->getCodigo() . "-" . $entity->getSecuencial(),/* $entity->getCliente()->getNombre()*/ $entity->getFechaEmision()->format("d/m/Y"), $fechaAutorizacion,$entity->getMonto(), $entity->getAbono(),$entity->getSaldo(), $entity->getEstadoCuenta(),'<button>editar</button><button>eliminar</button>'];
+            $facturaArray[$i] = [$entity->getId(), $entity->getEstablecimiento()->getCodigo() . "-" . $entity->getPtoEmision()->getCodigo() . "-" . $entity->getSecuencial(), $entity->getCliente()->getNombre(), $entity->getFechaEmision()->format("d/m/Y"), $fechaAutorizacion, $entity->getValorTotal(), $entity->getEstado()];
             $i++;
         }
 
@@ -285,6 +405,7 @@ class FacturaController extends Controller {
         );
 
         $post_data = json_encode($arr);
+        
 
         return new Response($post_data, 200, array('Content-Type' => 'application/json'));
 

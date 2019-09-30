@@ -21,13 +21,18 @@
 {% block content %}
 
 {{form_start(form)}}
-<table>
-<tr>
-<td class="col-lg-2">
-{{form_row(form.cliente)}}
-</td>
-</tr>
-</table>
+<label for="inputEmail3" class="col-sm-4 col-form-label" style="margin-top: 0.7rem;">Cliente</label>
+<div class="row" style="margin-top:2rem">
+<div class="col-lg-12">
+        <div class="form-group row">
+            
+            <div class="col-sm-8">
+                {{form_widget(form.cliente)}}
+            </div>
+        </div>
+    </div>
+</div>    
+
 
 <div class="row" style="margin-top:2rem">
     <div class="col-lg-4 chtm">
@@ -49,7 +54,7 @@
     <div class="col-lg-4 chtm">
         <div class="form-group row">
             <label for="inputEmail3" class="col-sm-2 col-form-label" style="margin-top: 0.7rem;">Valor</label>
-            <div class="col-sm-10">
+            <div class="col-sm-10 ">
                 {{form_widget(form.totalSinImpuestos)}}
             </div>
         </div>
@@ -63,16 +68,40 @@
         </div>
     </div>
 </div>
+<div class="row" style="margin-top:2rem">
+    <div class="col-lg-4 vista chtm">
+        <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-4 col-form-label" style="margin-top: 0.7rem;">Cuenta Contable</label>
+            <div class="col-sm-8">
+                {{form_widget(form.ctaContable)}}
+            </div>
+        </div>
+    </div>
+        <div class="col-lg-4  ban chtm">
+        <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-4 col-form-label" style="margin-top: 0.7rem;">Banco</label>
+            <div class="col-sm-8">
+              {{form_widget(form.banco)}}
+            </div>
+        </div>
+    </div>
+     <div class="col-lg-2 chtm">
+        <div class="form-group row">
+            <div class="col-sm-10">
+               <input type="search" id="bus" class="form-control mr-sm-2" placeholder="Buscar Tarea" onkeyup="doSearch()">
+            </div>
+        </div>
+    </div>
+</div>
 
 {{form_end(form)}}
-<form class="form-inline my-2 my-lg-1">
-<input type="search" id="bus" class="form-control mr-sm-2" placeholder="Buscar"
-</form>
+
 <div class="dataTable_wrapper table-responsive col-lg-12">  
-    <table class="table table-striped table-bordered table-hover" id="factura-table">
+    <table class="table table-striped table-bordered table-hover" id="factura-table" name="f">
         <thead>
             <tr>
-                
+                <th class="ruc">RUC</th>
+                <th class="nombre">Nombre</th>
                 <th>Nro Comprobante</th>
                 <th>Fecha Reguistro</th>
                 <th>Fecha Vencimiento</th>
@@ -86,26 +115,42 @@
         <tbody>
         
         {% for entity in entities %}
-            <tr>
+            <tr id="cta_trtable">
                 {#<td><a href="{{ path('pago', { 'id': entity[0].id }) }}">{{ entity[0].nombre }}</a></td>#}
+                <td HEIGHT="2" class="ruc1">{{entity.emisor.ruc}}</td>
+                <td HEIGHT="2" class="nombre1">{{entity.cliente.nombre}}</td>
                 <td HEIGHT="2">{{ entity.secuencial }}</td>
                 <td HEIGHT="2">{{ entity.fechaEmision|date('d-m-Y') }}</td>
                 <td HEIGHT="2">{{ entity.fechaAutorizacion|date('d-m-Y') }}</td>
                 <td HEIGHT="2">{{ entity.monto }}</td>
                 <td HEIGHT="2">{{ entity.abono }}</td>
-                <td HEIGHT="2">{{ entity.saldo }}</td>
+                <td HEIGHT="2" id="sal">{{ entity.saldo }}</td>
                 <td HEIGHT="2">{%if entity.estadoCuenta =="CANCELADO" %}<button disabled="disabled" class="btn btn-success link-boton">CANCELADO</button>{%else%}<button disabled="disabled" class="btn btn-danger link-boton">PENDIENTE</button>{% endif%}</td>
                 <td HEIGHT="2">
-                    <a href="{{ path('form_edit', { 'id': entity.id }) }}" title="Editar">
+                    {#<a href="{{ path('form_edit', { 'id': entity.id }) }}" title="Editar">
                         <button class="btn btn-primary link-boton">
                             <i class="fa fa-pencil-square-o"></i>
                         </button>
-                    </a>
-                    <button class="btn btn-danger link-boton accion" data-toggle="modal" data-target="#confirm-delete" type="button" accion = "{{entity.id}}">
-                        <i class="icon-trash"></i>
+                    </a>#}
+                    <div class="checkbox col-sm-6 ">
+                    
+                    <label>
+                        <input type="checkbox" name="id[]" value="{{ entity.saldo }}" id="nuevoCliente" name = "nuevoCliente" onclick="saldo()">
+                    </label>
+                    </div>
+                    {#
+                    <a href="{{ path('flormu', { 'id': entity.id }) }}" title="Editar">
+                    <button class="btn btn-danger link-boton {#accion" data-toggle="modal" data-target="#confirm-delete" type="button" accion = "{{entity.id}}"#}{#">#}
+                        {#<i class="icon-trash"></i>
                     </button>
+                    </a>#}
                      {#{{ form(deleteForms[entity.id], { 'attr': {'id': entity.id } })}}#}
                 </td>
+            </tr>
+            <tr class='noSearch hide'>
+
+                <td colspan="5"></td>
+
             </tr>
         {% endfor %}
         </tbody>
@@ -113,10 +158,12 @@
 </div>
 
     {% endblock %}
-    {% block javascript %}
+   {% block javascript %}
         <script src="{{asset('recursos/js/estilos.js')}}"></script>
     {% endblock %}
-    {#
+   
+    
+    {# 
     {% block javascript %}
 <!-- DataTables JavaScript -->
 <script src="{{asset('recursos/bower_components/datatables/media/js/jquery.dataTables.min.js')}}"></script>
@@ -124,6 +171,55 @@
 <script src="{{asset('recursos/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js')}}"></script>
 <script src="{{asset('recursos/js/script.js')}}"></script>
 <script>
+
+                       
+                    function saldo(){
+                        /*
+                        let buys = document.getElementById('factura-table');
+                        //let cboxAll = buys.querySelector('thead input[type="checkbox"]');
+                        let cboxes = buys.querySelectorAll('tbody input[type="checkbox"]');
+                        let totalOutput = document.getElementById('idCliente');
+                        let total = 0;
+                        
+                        [].forEach.call(cboxes, function (cbox) {
+                        cbox.addEventListener('change', handleRowSelect);
+                        });
+                        
+                        /*cboxAll.addEventListener('change', function () {
+                        [].forEach.call(cboxes, function (cbox) {
+                            //cbox.checked = cboxAll.checked;
+                            cbox.click();
+                        });
+                        });*/
+                        /*
+                        function handleRowSelect (e) {
+                        let row = e.target.parentNode.parentNode;
+                        //let qty = row.querySelector('td:nth-child(3)').textContent;
+                        let price = row.querySelector('td:nth-child(6)').textContent;
+                        let cost = Number(price) ;//* Number(price);
+                        
+                        if (e.target.checked) {
+                            total += cost;
+                        } else {
+                            total -= cost;
+                        }
+                    
+                    total = Number(total.toFixed(2));
+                    totalOutput.value = total;
+                    }
+                    */total=0
+                   $("input:checkbox:checked").each(function() {
+                       var count = Number($(this).val());
+                       total += count;
+                       $('#idCliente').val(total);
+                    });
+
+
+
+                    
+                    
+                    }
+                    {#
     var oTable = $("#factura-table").dataTable({
         columnDefs: [
             {
@@ -178,22 +274,11 @@
             oTable.fnFilter($(this).val());
         }
     });
+    #}
+    {#
 </script>
-<script>
-    $( "#forma" ).autocomplete({
-            change: function(event, ui) { 
-            alert("entra");
-            if($('#forma option:selected').val()=='1'){
-                for (i=0;i<document.mostrarAulas.elements.length;i++)
-                    if(document.mostrarAulas.elements[i].type == "checkbox")
-                        document.mostrarAulas.elements[i].checked=1 
-            }
-            if($('#forma option:selected').val()=='2'){
-                for (i=0;i<document.mostrarAulas.elements.length;i++)
-                    if(document.mostrarAulas.elements[i].type == "checkbox")
-                    document.mostrarAulas.elements[i].checked=0 
-            } }
-        });
-</script>
+ #}
+{#
    {% endblock %} 
    #}
+   

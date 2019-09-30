@@ -211,9 +211,16 @@ class Factura {
     protected $valorTotal;
     
     /**
+     * @var string
+     *
+     * @ORM\Column(name="banco", type="string", length=200, nullable=true)
+     */
+    protected $banco;
+
+    /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="ctaContable", type="integer")
      */
     protected $ctaContable;
 
@@ -781,6 +788,27 @@ class Factura {
      */
     public function getValorTotal() {
         return $this->valorTotal;
+    }
+
+    /**
+     * Get banco
+     *
+     * @return string 
+     */
+    public function getBanco() {
+        return $this->banco;
+    }
+
+    /**
+     * Set banco
+     *
+     * @param string $banco
+     * @return Factura
+     */
+    public function setBanco($banco) {
+        $this->banco = $banco;
+
+        return $this;
     }
 
     /**

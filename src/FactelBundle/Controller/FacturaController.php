@@ -154,6 +154,7 @@ class FacturaController extends Controller {
                         'label'=>'Valor',
                         'required' => true,
                         'post_max_size_message'=>'6'
+                        
                         )
                          
                     )
@@ -165,10 +166,13 @@ class FacturaController extends Controller {
                     ->getForm();
                     $form->get('formaPago')->getData();
                     $deleteForms = array();
+                    /*$personas = $this->getDoctrine()
+                    ->getRepository(Factura::class)
+                    ->findAll();*/
                     $personas = $this->getDoctrine()
                     ->getRepository(Factura::class)
-                    ->findAll();
-
+                    ->findCuentas();
+                    
                     foreach ($personas as $entity) {
                         $deleteForms[$entity->getId()] = $this->createDeleteForm($entity->getId())->createView();
                     }

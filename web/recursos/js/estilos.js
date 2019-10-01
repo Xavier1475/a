@@ -71,6 +71,15 @@ $("input:checkbox:checked").each(function() {
 
 }
 
+function des(){
+    var a=$('#form_totalSinImpuestos').val();
+    var b= $('#form_totalDescuento').val();
+    var bc=b/100;
+    var c= Number(a)*Number(bc);
+    var d=a-c;
+    $('#form_totalSinImpuestos').val(d);
+}
+
 function doSearch()
 
         {

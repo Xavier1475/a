@@ -139,7 +139,7 @@ class FacturaRepository extends EntityRepository {
     public function findCuentas(){
         $em = $this->getEntityManager();
         $qb = $em->createQueryBuilder();
-        select("factura, estab, ptoEmision, cliente")
+        $qb->select("factura, estab, ptoEmision, cliente")
         ->from("FactelBundle:Factura", "factura")
         ->join("factura.emisor", "emisor")
         ->join("factura.establecimiento", "estab")
@@ -174,6 +174,7 @@ class FacturaRepository extends EntityRepository {
 
         return $qb->getQuery()->getResult();
     }
+    
 
     public function cantidadFacturas($idPtoEmision, $idEmisor, $soloAutorizadas = false) {
         $em = $this->getEntityManager();

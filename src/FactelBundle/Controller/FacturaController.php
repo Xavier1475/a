@@ -184,7 +184,22 @@ class FacturaController extends Controller {
                             'deleteForms' => $deleteForms,
                         ));
     }
-    
+    /*
+     * Lists all Factura entities.
+     *
+     * @Route("/pagocli/{sal}/sald", name="saldo")
+     * @Secure(roles="ROLE_EMISOR")
+     * @Method("GET")
+     */
+    public function saldoact($sal){
+        $valor=$this->getDoctrine()
+                    ->getRepository(Factura::class)
+                    ->findSaldo($sal);
+
+         return $this->render('FactelBundle:PagoCliente:index.html.twig',array(
+             'valor'=>$valor
+         ));           
+    }
     /**
      * @Route("/pagocli/{id}/edit", name="form_edit")
      * @Secure(roles="ROLE_ADMIN, ROLE_EMISOR_ADMIN")
@@ -192,8 +207,15 @@ class FacturaController extends Controller {
      * @Template()
      */
     public function editForm($id)
-    
+        
     {
+        $valor=$this->getDoctrine()
+                    ->getRepository(Factura::class)
+                    ->findSaldo($id);
+
+         return $this->render('FactelBundle:PagoCliente:edit.html.twig',array( 
+             'valor'=>$valor
+         ));
         /*
         $em = $this->getDoctrine()
         ->getRepository(Factura::class)->find($id);
@@ -218,91 +240,7 @@ class FacturaController extends Controller {
         $form->add('submit', 'submit', array('label' => 'Update'));
 
         return $form;*/
-               
-        $usu= new Factura();
         
-        $form= $this->createFormBuilder($usu)
-                    //->setAction($this->generateUrl('save_animal'))
-                    ->add('cliente', 'choice',[
-                        'label'=>'Cliente',
-                        'choices' => array(
-                            '9'=>'DANNY CEDEÑO'
-                    )
-                        ])
-                    
-                    
-                    ->add('formaPago', 'choice', array(
-                        'label'=>'Formas de Pago',
-                        'choices' => array(
-                            '1'=>'Efectivo',
-                            '2'=>'Deposito',
-                            '3'=>'Cheque',
-                            '4'=>'Transferencia',
-                            '5'=>'Tarjeta de Credito',
-                            '6'=>'Otro'
-                    )))
-                    ->add('secuencial', 'text', array(
-                        'label' => 'Nro tarjeta',
-                        'required' => true,
-                        
-                    )
-                        
-                    )
-                    ->add('banco','text',array(
-                        'label'=>'Banco',
-                        'required' => true,
-                    ))   
-
-                    ->add('ctaContable','text',array(
-                        'label'=>'Cuenta Contable',
-                        'required' => true,
-                    ))
-                    ->add('ctaContable','text',array(
-                        'label'=>'Cuenta Contable',
-                        'required' => true,
-                    ))
-                    ->add('totalSinImpuestos', 'text', array(
-                        'label'=>'Valor',
-                        'required' => true,
-                        'post_max_size_message'=>'6'
-                        
-                        )
-                         
-                    )
-                    ->add('totalDescuento', 'text', array(
-                        'label'=>'Descuento',
-                        
-                    ))
-
-                    ->add('Actualizar','submit')
-                    
-                    ->getForm();
-                    //Cargar doctrine
-               $doctrine = $this->getDoctrine();
-               //Cargar entityManager
-               $em = $doctrine->getManager();
-               //CArgar el repositorio
-               $lista = $em->getRepository(Factura::class);
-               //Conseguir campo
-               $animal=$lista->find($id);
-               if(!$animal){
-                $m="El usuario no existe";
-                }else{
-                 
-                    $em->persist($animal);
-                    
-                    -$em->flush();
-                    $m="Datos Modificados";
-                }
-                    /*$personas = $this->getDoctrine()
-                    ->getRepository(Factura::class)
-                    ->findAll();*/
-                    return $this->render(
-                        'FactelBundle:PagoCliente:edit.html.twig',array(
-                            'form' => $form->createView(),
-                            
-                            'id'=>$id
-                        ));
     }
               
     

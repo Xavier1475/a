@@ -20,80 +20,39 @@
 </div>
 {% endblock %}
 {% block content %}
-{{id}}
-{{form_start(form)}}
+<table table class="table table-striped table-bordered table-hover" id="factura-table" name="f">
+<thead>
+            <tr>
+                <th class="ruc">RUC</th>
+                <th class="nombre">Nombre</th>
+                <th>Nro Comprobante</th>
+                <th>Fecha Reguistro</th>
+                <th>Fecha Vencimiento</th>
+                <th>Monto</th>
+                <th class="ruc">Abono</th>
+                <th>Saldo</th>
+                <th>Estado</th>
+                <th>Actions</th>
+            </tr>
+</thead>
+<tbody>
+{% for v in valor %}
+<tr id="cta_trtable">
+                {#<td><a href="{{ path('pago', { 'id': entity[0].id }) }}">{{ entity[0].nombre }}</a></td>#}
 
-<div class="col-lg-4 ">
-        <div class="form-group row">
-            <label for="inputEmail3" class="col-sm-4 col-form-label" style="margin-top: 0.7rem;">Cliente</label>
-            <div class="col-sm-8">
-                {{form_widget(form.cliente)}}
-            </div>
-        </div>
-    </div>
+                
+                <td HEIGHT="2" id="sal">{{ v.total }}</td>
+               
+            </tr>
+            <tr class='noSearch hide'>
 
-</div>
+                <td colspan="5"></td>
+
+            </tr>
+{% endfor %}
+</tbody>
+</table>
 
 
-<div class="row" style="margin-top:10rem">
-    <div class="col-lg-4 chtm">
-        <div class="form-group row">
-            <label for="inputEmail3" class="col-sm-4 col-form-label" style="margin-top: 0.9rem;">Forma pago</label>
-            <div class="col-sm-8">
-                {{form_widget(form.formaPago)}}
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-4 vistaw chtm">
-        <div class="form-group row">
-            <label for="inputEmail3" class="col-sm-4 col-form-label" style="margin-top: 0.7rem;">Nro Tarjeta</label>
-            <div class="col-sm-8">
-                {{form_widget(form.secuencial)}}
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-4 chtm">
-        <div class="form-group row">
-            <label for="inputEmail3" class="col-sm-2 col-form-label" style="margin-top: 0.7rem;">Valor</label>
-            <div class="col-sm-10">
-                {{form_widget(form.totalSinImpuestos)}}
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-4 chtm">
-        <div class="form-group row">
-            <label for="inputEmail3" class="col-sm-4 col-form-label" style="margin-top: 0.7rem;">Descuento</label>
-            <div class="col-sm-8">
-                {{form_widget(form.totalDescuento)}}
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row" style="margin-top:2rem">
-    <div class="col-lg-4 vista chtm">
-        <div class="form-group row">
-            <label for="inputEmail3" class="col-sm-4 col-form-label" style="margin-top: 0.7rem;">Cuenta Contable</label>
-            <div class="col-sm-8">
-                {{form_widget(form.ctaContable)}}
-            </div>
-        </div>
-    </div>
-        <div class="col-lg-4  ban chtm">
-        <div class="form-group row">
-            <label for="inputEmail3" class="col-sm-4 col-form-label" style="margin-top: 0.7rem;">Banco</label>
-            <div class="col-sm-8">
-              {{form_widget(form.banco)}}
-            </div>
-        </div>
-    </div>
-     <div class="col-lg-4 chtm">
-        <div class="form-group row">
-            <div class="col-sm-10">
-               {{form_row(form.Actualizar)}}
-            </div>
-        </div>
-    </div>
-</div>
 
-{{form_end(form)}}
 {% endblock %}

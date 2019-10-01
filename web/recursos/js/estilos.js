@@ -71,6 +71,15 @@ $("input:checkbox:checked").each(function() {
 
 }
 
+function saltot(){
+    total=0
+$("input:checkbox:checked").each(function() {
+   var count = Number($(this).val());
+   total += count;
+   location.href="http://localhost/FactelWebCliente/FactelWebCliente/web/comprobantes/factura/pagocli/?=total/edit";
+});
+}
+
 function des(){
     var a=$('#form_totalSinImpuestos').val();
     var b= $('#form_totalDescuento').val();
@@ -78,6 +87,16 @@ function des(){
     var c= Number(a)*Number(bc);
     var d=a-c;
     $('#form_totalSinImpuestos').val(d);
+
+    $.ajax({
+        type:"POST",
+        url:"{{path('saldo','sal':a)}}",
+        data:{a:a},
+        typedata:text,
+        success: function(text){
+            alert(text);
+            }
+        })
 }
 
 function doSearch()

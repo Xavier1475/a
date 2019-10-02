@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-10-2019 a las 16:17:09
+-- Tiempo de generación: 02-10-2019 a las 23:32:26
 -- Versión del servidor: 10.4.6-MariaDB
 -- Versión de PHP: 7.3.9
 
@@ -21,6 +21,17 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `fact`
 --
+
+DELIMITER $$
+--
+-- Procedimientos
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `saldos` (IN `abon` DECIMAL(11,2))  BEGIN
+SELECT IF(SUM(saldo)>abon,SUM(saldo)-abon,'n') as total
+from factura;
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -67,6 +78,17 @@ CREATE TABLE `cliente` (
 
 INSERT INTO `cliente` (`id`, `emisor_id`, `nombre`, `tipoIdentificacion`, `identificacion`, `direccion`, `celular`, `correoElectronico`, `createdAt`, `updatedAt`, `createdBy_id`, `updatedBy_id`, `deletedBy_id`) VALUES
 (9, 5, 'DANNY CEDEÑO', '04', '0930087465001', 'CUENCA', '0999999999', 'DANNY.PATO@OUTLOOK.COM', '2019-08-14 14:01:03', '2019-08-14 14:02:48', 6, 6, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ctacontable`
+--
+
+CREATE TABLE `ctacontable` (
+  `id` int(11) NOT NULL,
+  `nroCta` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -235,8 +257,11 @@ CREATE TABLE `factura` (
   `totalDescuento` decimal(10,2) NOT NULL,
   `propina` decimal(10,2) NOT NULL,
   `valorTotal` decimal(10,2) NOT NULL,
+  `nroCuota` int(11) NOT NULL,
   `monto` decimal(11,2) NOT NULL,
+  `fechaVencimiento` date NOT NULL,
   `ctaContable` int(11) NOT NULL,
+  `nroCuenta` int(11) NOT NULL,
   `banco` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `abono` decimal(11,2) NOT NULL,
   `saldo` decimal(11,2) NOT NULL,
@@ -256,11 +281,12 @@ CREATE TABLE `factura` (
 -- Volcado de datos para la tabla `factura`
 --
 
-INSERT INTO `factura` (`id`, `cliente_id`, `emisor_id`, `establecimiento_id`, `claveAcceso`, `numeroAutorizacion`, `fechaAutorizacion`, `estado`, `ambiente`, `tipoEmision`, `secuencial`, `formaPago`, `fechaEmision`, `nombreArchivo`, `totalSinImpuestos`, `subtotal12`, `subtotal0`, `subtotalNoIVA`, `subtotalExentoIVA`, `valorICE`, `valorIRBPNR`, `iva12`, `totalDescuento`, `propina`, `valorTotal`, `monto`, `ctaContable`, `banco`, `abono`, `saldo`, `estadoCuenta`, `firmado`, `enviarSiAutorizado`, `observacion`, `createdAt`, `updatedAt`, `ptoEmision_id`, `createdBy_id`, `updatedBy_id`, `deletedBy_id`) VALUES
-(17, 9, 5, 5, '1408201901030156828300120010010000000001234567814', '1408201901030156828300120010010000000001234567814', '2019-08-14 07:02:46', 'AUTORIZADO', '2', '1', '000000000', '01', '2019-08-14', 'FAC001-001-000000000', '1.00', '1.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.12', '0.00', '0.00', '1.12', '150.25', 0, '', '0.50', '149.75', 'PENDIENTE', 1, 1, '', '2019-08-14 14:02:10', '2019-08-14 14:02:56', 5, 6, 6, NULL),
-(18, 9, 5, 5, '1408201901030156828300120010010000000011234567811', '1408201901030156828300120010010000000011234567811', '2019-08-14 09:43:05', 'AUTORIZADO', '2', '1', '000000001', '20', '2019-08-14', 'FAC001-001-000000001', '1.00', '1.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.12', '0.00', '0.00', '1.12', '15.25', 0, '', '2.00', '13.25', 'PENDIENTE', 1, 0, 'PAGO LAPTOP', '2019-08-14 16:42:49', '2019-08-14 16:43:14', 5, 6, 6, NULL),
-(19, 9, 5, 5, '2308201901030156828300110010010000000021234567816', '2308201901030156828300110010010000000021234567816', '2019-08-23 03:08:18', 'AUTORIZADO', '1', '1', '000000002', '20', '2019-08-23', 'FAC001-001-000000002', '1.00', '1.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.12', '0.00', '0.00', '1.12', '19.75', 0, '', '18.00', '1.75', 'PENDIENTE', 1, 1, 'TODO OKay', '2019-08-23 22:05:40', '2019-08-23 22:09:23', 5, 6, 6, NULL),
-(20, 9, 5, 5, '2509201901030156828300110010010000000031234567817', NULL, NULL, 'CREADA', '1', '1', '000000003', '15', '2019-09-25', NULL, '1.00', '1.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.12', '0.00', '0.00', '1.12', '19.50', 0, '', '19.50', '0.00', 'CANCELADO', 0, 0, 'eemplo', '2019-09-16 18:24:31', '2019-09-16 18:24:31', 5, 6, 6, NULL);
+INSERT INTO `factura` (`id`, `cliente_id`, `emisor_id`, `establecimiento_id`, `claveAcceso`, `numeroAutorizacion`, `fechaAutorizacion`, `estado`, `ambiente`, `tipoEmision`, `secuencial`, `formaPago`, `fechaEmision`, `nombreArchivo`, `totalSinImpuestos`, `subtotal12`, `subtotal0`, `subtotalNoIVA`, `subtotalExentoIVA`, `valorICE`, `valorIRBPNR`, `iva12`, `totalDescuento`, `propina`, `valorTotal`, `nroCuota`, `monto`, `fechaVencimiento`, `ctaContable`, `nroCuenta`, `banco`, `abono`, `saldo`, `estadoCuenta`, `firmado`, `enviarSiAutorizado`, `observacion`, `createdAt`, `updatedAt`, `ptoEmision_id`, `createdBy_id`, `updatedBy_id`, `deletedBy_id`) VALUES
+(17, 9, 5, 5, '1408201901030156828300120010010000000001234567814', '1408201901030156828300120010010000000001234567814', '2019-08-14 07:02:46', 'AUTORIZADO', '2', '1', '000000000', '01', '2019-08-14', 'FAC001-001-000000000', '1.00', '1.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.12', '0.10', '0.00', '1.12', 5, '150.25', '2019-10-23', 0, 0, '', '148.28', '1.97', 'PENDIENTE', 1, 1, '', '2019-08-14 14:02:10', '2019-08-14 14:02:56', 5, 6, 6, NULL),
+(18, 9, 5, 5, '1408201901030156828300120010010000000011234567811', '1408201901030156828300120010010000000011234567811', '2019-08-14 09:43:05', 'AUTORIZADO', '2', '1', '000000001', '20', '2019-08-14', 'FAC001-001-000000001', '1.00', '1.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.12', '0.00', '0.00', '1.12', 4, '15.25', '2019-10-09', 0, 0, '', '2.00', '13.25', 'PENDIENTE', 1, 0, 'PAGO LAPTOP', '2019-08-14 16:42:49', '2019-08-14 16:43:14', 5, 6, 6, NULL),
+(19, 9, 5, 5, '2308201901030156828300110010010000000021234567816', '2308201901030156828300110010010000000021234567816', '2019-08-23 03:08:18', 'AUTORIZADO', '1', '1', '000000002', '20', '2019-08-23', 'FAC001-001-000000002', '1.00', '1.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.12', '0.00', '0.00', '1.12', 3, '19.75', '2019-10-04', 0, 0, '', '18.00', '1.75', 'PENDIENTE', 1, 1, 'TODO OKay', '2019-08-23 22:05:40', '2019-08-23 22:09:23', 5, 6, 6, NULL),
+(20, 9, 5, 5, '2509201901030156828300110010010000000031234567817', NULL, NULL, 'CREADA', '1', '1', '000000003', '15', '2019-09-25', NULL, '1.00', '1.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.12', '0.00', '0.00', '1.12', 2, '19.50', '2019-10-03', 0, 0, '', '19.50', '0.00', 'CANCELADO', 0, 0, 'eemplo', '2019-09-16 18:24:31', '2019-09-16 18:24:31', 5, 6, 6, NULL),
+(59, 9, 5, 5, '', NULL, '2019-10-09 00:00:00', '', '', '', '00000014', '', '2019-10-16', NULL, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 1, '20.00', '2019-10-02', 0, 0, '', '0.00', '20.00', 'PENDIENTE', 0, 0, NULL, NULL, NULL, 5, 6, NULL, NULL);
 
 --
 -- Disparadores `factura`
@@ -846,6 +872,12 @@ ALTER TABLE `cliente`
   ADD KEY `IDX_3BA1A2B963D8C20E` (`deletedBy_id`);
 
 --
+-- Indices de la tabla `ctacontable`
+--
+ALTER TABLE `ctacontable`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `cuentaporcobrar`
 --
 ALTER TABLE `cuentaporcobrar`
@@ -1104,6 +1136,12 @@ ALTER TABLE `cliente`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
+-- AUTO_INCREMENT de la tabla `ctacontable`
+--
+ALTER TABLE `ctacontable`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `cuentaporcobrar`
 --
 ALTER TABLE `cuentaporcobrar`
@@ -1131,7 +1169,7 @@ ALTER TABLE `establecimiento`
 -- AUTO_INCREMENT de la tabla `factura`
 --
 ALTER TABLE `factura`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- AUTO_INCREMENT de la tabla `facturahasproducto`

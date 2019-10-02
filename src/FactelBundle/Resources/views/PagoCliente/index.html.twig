@@ -57,10 +57,12 @@
             <label for="inputEmail3" class="col-sm-2 col-form-label" style="margin-top: 0.7rem;">Valor</label>
             <div class="col-sm-10 ">
                 {{form_widget(form.totalSinImpuestos)}}
-                {##}{% set a %}"<script>"$('#form_totalSinImpuestos').val()";</script>"{% endset %}
+               
                 <button type="button" class="btn btn-outline-primary" onclick="des()">Guardar</button>
-                <a href="{{ path('form_edit', { 'id': 1 }) }}" title="Editar">a
+                {% for v in entities %}
+                <a href="{{ path('form_edit', { 'id': v.saldo }) }}" title="Editar">
                 </a>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -69,7 +71,7 @@
             <label for="inputEmail3" class="col-sm-4 col-form-label" style="margin-top: 0.7rem;">Descuento</label>
             <div class="col-sm-8">
                 {{form_widget(form.totalDescuento)}}
-                <button type="button" class="btn btn-outline-primary" onclick="saltot()">Saldo Total</button>
+                {#<button type="button" class="btn btn-outline-primary" onclick="saltot()">Saldo Total</button>#}
             </div>
         </div>
     </div>
@@ -80,6 +82,14 @@
             <label for="inputEmail3" class="col-sm-4 col-form-label" style="margin-top: 0.7rem;">Cuenta Contable</label>
             <div class="col-sm-8">
                 {{form_widget(form.ctaContable)}}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 vista chtm">
+        <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-4 col-form-label" style="margin-top: 0.7rem;">Nro Cuenta</label>
+            <div class="col-sm-8">
+                {{form_widget(form.nroCuenta)}}
             </div>
         </div>
     </div>
@@ -109,6 +119,7 @@
                 <th class="ruc">RUC</th>
                 <th class="nombre">Nombre</th>
                 <th>Nro Comprobante</th>
+                <th>Nro Cuota</th>
                 <th>Fecha Reguistro</th>
                 <th>Fecha Vencimiento</th>
                 <th>Monto</th>
@@ -121,13 +132,29 @@
         <tbody>
         
         {% for entity in entities %}
+         {#<script>
+           function loadTable(fields, data) {
+    //$('#' + tableId).empty(); //not really necessary
+    var rows = '';
+    $.each(data, function(index, item) {
+        var row = '<tr>';
+        $.each(fields, function(index, field) {
+            row += '<td>' + item[field+''] + '</td>';
+        });
+        rows += row + '<tr>';
+    });
+    $('#factura-table').html(rows);
+}     
+loadTable('factura-table', [{{entity.emisor.ruc}}, {{entity.cliente.nombre}}, {{ entity.secuencial }}], entity);
+        </script>#}
             <tr id="cta_trtable">
                 {#<td><a href="{{ path('pago', { 'id': entity[0].id }) }}">{{ entity[0].nombre }}</a></td>#}
                 <td HEIGHT="2" class="ruc1">{{entity.emisor.ruc}}</td>
                 <td HEIGHT="2" class="nombre1">{{entity.cliente.nombre}}</td>
                 <td HEIGHT="2">{{ entity.secuencial }}</td>
+                <td HEIGHT="2">{{entity.nroCuota}}</td>
                 <td HEIGHT="2">{{ entity.fechaEmision|date('d-m-Y') }}</td>
-                <td HEIGHT="2">{{ entity.fechaAutorizacion|date('d-m-Y') }}</td>
+                <td HEIGHT="2">{% if entity.fechaVencimiento|date('d-m-Y')>"now"|date("d-m-Y") %}{{entity.fechaVencimiento|date('d-m-Y')}}{% else %}<button disabled="disabled" class="btn btn-danger link-boton">{{entity.fechaVencimiento|date('d-m-Y')}}</button>{% endif%}</td>{#{{ entity.fechaVencimiento|date('d-m-Y') }}</td>#}
                 <td HEIGHT="2">{{ entity.monto }}</td>
                 <td HEIGHT="2" class="ruc1">{{ entity.abono }}</td>
                 <td HEIGHT="2" id="sal">{{ entity.saldo }}</td>
@@ -153,6 +180,7 @@
                      {#{{ form(deleteForms[entity.id], { 'attr': {'id': entity.id } })}}#}
                 </td>
             </tr>
+
             <tr class='noSearch hide'>
 
                 <td colspan="5"></td>
@@ -160,8 +188,14 @@
             </tr>
         {% endfor %}
         </tbody>
+    
     </table>
-</div>
+    <div id="total">
+    <label for="inputEmail3" class="col-sm-2 col-form-label" style="margin-top: 0.7rem;">TOTAL:</label>
+    <input type="text" id="sum" class="form-control mr-sm-8" placeholder="0.00" disabled>
+    </div>
+        
+
 
     {% endblock %}
    {% block javascript %}

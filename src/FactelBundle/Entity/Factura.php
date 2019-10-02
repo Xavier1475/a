@@ -209,6 +209,13 @@ class Factura {
      * @ORM\Column(name="valorTotal", type="decimal", scale=2)
      */
     protected $valorTotal;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="nroCuota", type="integer", scale=2)
+     */
+    protected $nroCuota;
     
     /**
      * @var string
@@ -223,6 +230,20 @@ class Factura {
      * @ORM\Column(name="ctaContable", type="integer")
      */
     protected $ctaContable;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fechaVencimiento", type="date")
+     */
+    protected $fechaVencimiento;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="nroCuenta", type="integer")
+     */
+    protected $nroCuenta;
 
     /**
      * @var float
@@ -791,6 +812,30 @@ class Factura {
     }
 
     /**
+     * Set nroCuota
+     *
+     * @param int $nroCuota
+     * @return Factura
+     */
+    public function setNroCuota($nroCuota) {
+        $this->nroCuota = $nroCuota;
+
+        return $this;
+    }
+
+
+    /**
+     * Get nroCuota
+     *
+     * @return int 
+     */
+    public function getNroCuota() {
+        return $this->nroCuota;
+    }
+
+    
+
+    /**
      * Get banco
      *
      * @return string 
@@ -809,6 +854,27 @@ class Factura {
         $this->banco = $banco;
 
         return $this;
+    }
+
+    /**
+     * Set fechaVencimiento
+     *
+     * @param \DateTime $fechaVencimiento
+     * @return Factura
+     */
+    public function setFechaVencimiento($fechaVencimiento) {
+        $this->fechaVencimiento = $fechaVencimiento;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaVencimiento
+     *
+     * @return \DateTime 
+     */
+    public function getFechaVencimiento() {
+        return $this->fechaVencimiento;
     }
 
     /**
@@ -832,6 +898,27 @@ class Factura {
         return $this->ctaContable;
     }
 
+    /**
+     * Set nroCuenta
+     *
+     * @param integer $nroCuenta
+     * @return Factura
+     */
+    public function setNroCuenta($nroCuenta) {
+        $this->nroCuenta = $nroCuenta;
+
+        return $this;
+    }
+
+    /**
+     * Get nroCuenta
+     *
+     * @return integer 
+     */
+    public function getNroCuenta() {
+        return $this->nroCuenta;
+    }
+    
     /**
      * Set monto
      *

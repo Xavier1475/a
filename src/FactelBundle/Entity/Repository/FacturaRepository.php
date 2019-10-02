@@ -145,7 +145,8 @@ class FacturaRepository extends EntityRepository {
         ->join("factura.establecimiento", "estab")
         ->join("factura.ptoEmision", "ptoEmision")
         ->join("factura.cliente", "cliente")
-
+        ->where('factura.saldo > 0')
+        ->orderBy("factura.nroCuota")
                 ;
 
                 return $qb->getQuery()->getResult();
@@ -153,8 +154,7 @@ class FacturaRepository extends EntityRepository {
     public function findSaldo($sal){
         $em = $this->getEntityManager();
         $qb = $em->createQueryBuilder();
-        $qb->select("factura, estab, ptoEmision, cliente")
-        ->addSelect("CASE WHEN SUM(factura.saldo)>:abon THEN SUM(factura.saldo)-:abon ELSE SUM(factura.saldo) END AS total")
+        $qb->select("factura, estab, ptoEmision, cliente,CASE WHEN SUM(factura.saldo)>:abon THEN SUM(factura.saldo)-:abon ELSE SUM(factura.saldo) END AS total")
         ->from("FactelBundle:Factura", "factura")
         ->join("factura.emisor", "emisor")
         ->join("factura.establecimiento", "estab")

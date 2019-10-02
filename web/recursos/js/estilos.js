@@ -74,29 +74,89 @@ $("input:checkbox:checked").each(function() {
 function saltot(){
     total=0
 $("input:checkbox:checked").each(function() {
+    /*var h= $('#form_totalDescuento').val();
+    var bc=h/100;
+    var c= Number(a)*Number(bc);
+    var d=a-c;
+    var e=d.toFixed(2);
    var count = Number($(this).val());
    total += count;
-   location.href="http://localhost/FactelWebCliente/FactelWebCliente/web/comprobantes/factura/pagocli/?=total/edit";
+   var b=Number($('#form_totalSinImpuestos').val());
+  var a="http://localhost/FactelWebCliente/FactelWebCliente/web/comprobantes/factura/pagocli/1/edit";
+   var res=a.replace("1",b);
+   location.href=res;
+   console.log(res);
+   /*
+        event.preventDefault();
+        console.log($(this).closest('tr').remove()
+        );*/
+
+      if(b == 0){
+        var count = Number($(this).val());
+        total += count;
+        var b=Number($('#form_totalSinImpuestos').val(total));
+      } else{
+        var count = Number($(this).val());
+        total += count;
+        var a=$('#form_totalSinImpuestos').val();
+        var h= $('#form_totalDescuento').val();
+        var bc=h/100;
+        var c= Number(a)*Number(bc);
+        var d=a-c;
+        var e=d.toFixed(2);
+        $('#form_totalSinImpuestos').val(e);
+      }
+
 });
 }
 
+
+
+  var t=0;
+  $('table#factura-table tbody td:nth-child(' + 9 + ')').each(function (index) 
+  {
+    t += parseFloat($(this).text()); 
+     
+  });
+  $('#sum').val(t);  
+
+
 function des(){
+    /*
     var a=$('#form_totalSinImpuestos').val();
     var b= $('#form_totalDescuento').val();
     var bc=b/100;
     var c= Number(a)*Number(bc);
     var d=a-c;
-    $('#form_totalSinImpuestos').val(d);
-
-    $.ajax({
-        type:"POST",
-        url:"{{path('saldo','sal':a)}}",
-        data:{a:a},
-        typedata:text,
-        success: function(text){
-            alert(text);
-            }
-        })
+    var e=d.toFixed(2);
+    $('#form_totalSinImpuestos').val(e);
+    console.log(e);*/
+    total=0
+    resta=0
+$("input:checkbox:checked").each(function() {
+    var b= Number($('#form_totalDescuento').val());
+    if(b == 0){
+        var count = Number($(this).val());
+        total += count;
+        var b=Number($('#form_totalSinImpuestos').val());
+      } else{
+        var count = Number($(this).val());
+        total += count;
+        var a=$('#form_totalSinImpuestos').val();
+        var bc=b/100;
+        var c= Number(a)*Number(bc);
+        var d=a-c;
+        var e=d.toFixed(2);
+        $('#form_totalSinImpuestos').val(e);
+      }
+      $(this).closest('tr').remove();
+      resta =total-$('#form_totalSinImpuestos').val();
+    });
+    var f = new Date();
+    var tds='<td>000000011</td><td>1</td><TD>11-10-2019</td><TD>3</td><TD>5</td><td>6</td><td></td><td><input type="checkbox"><td>';
+    var fec=tds.replace("3",f.getDate()+"-"+ (f.getMonth() +1) + "-" + f.getFullYear());
+    var res=fec.replace("6",resta);
+    document.getElementById("factura-table").insertRow(-1).innerHTML = res;
 }
 
 function doSearch()

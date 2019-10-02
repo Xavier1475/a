@@ -137,6 +137,10 @@ class FacturaController extends Controller {
                     )
                         
                     )
+                    ->add('nroCuenta','text',array(
+                        'label'=>'Nro Cuenta',
+                        
+                    ))
                     ->add('banco','text',array(
                         'label'=>'Banco',
                         'required' => true,
@@ -172,10 +176,19 @@ class FacturaController extends Controller {
                     $personas = $this->getDoctrine()
                     ->getRepository(Factura::class)
                     ->findCuentas();
-                    
-                    foreach ($personas as $entity) {
-                        $deleteForms[$entity->getId()] = $this->createDeleteForm($entity->getId())->createView();
-                    }
+
+                    /*$fact = $this->getDoctrine()
+                    ->getRepository(Factura::class)
+                    ->findCuentas();
+                    $sum=0;
+                    foreach ($fact as $a) {
+                        //$deleteForms[$entity->getId()] = $this->createDeleteForm($entity->getId())->createView();
+                        $sum=0;
+                        foreach($a->abono as $r){
+                            $sum += $r->number;
+                        }
+                        $a->sum = $sum;
+                    }*/
 
                 return $this->render(
                         'FactelBundle:PagoCliente:index.html.twig',array(

@@ -176,7 +176,8 @@ class FacturaController extends Controller {
                     $personas = $this->getDoctrine()
                     ->getRepository(Factura::class)
                     ->findCuentas();
-
+                        $fact= new Factura();
+                        $s=$fact->getFechaVencimiento();
                     /*$fact = $this->getDoctrine()
                     ->getRepository(Factura::class)
                     ->findCuentas();
@@ -195,6 +196,7 @@ class FacturaController extends Controller {
                             'form' => $form->createView(),
                             'entities' => $personas,
                             'deleteForms' => $deleteForms,
+                            'fecha'=> $s
                         ));
     }
     /*

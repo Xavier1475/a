@@ -136,6 +136,19 @@ class FacturaRepository extends EntityRepository {
         $qb->orderBy("factura.secuencial", "DESC");
         return $qb->getQuery()->getResult();
     }
+    public function editCuentas(){
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+        $qb->update("FactelBundle:Factura", "factura")
+                ->set('factura.monto", :monto')
+                ->set('factura.abono", :abono')
+                ->set('factura.saldo", :monto')
+                ->where('factura.id = :id')
+                ->setParameter('id', $id);
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
     public function findCuentas(){
         $em = $this->getEntityManager();
         $qb = $em->createQueryBuilder();

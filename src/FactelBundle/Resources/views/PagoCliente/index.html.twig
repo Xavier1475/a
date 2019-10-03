@@ -122,10 +122,10 @@
                 <th>Nro Cuota</th>
                 <th>Fecha Reguistro</th>
                 <th>Fecha Vencimiento</th>
-                <th>Monto</th>
-                <th class="ruc">Abono</th>
+                {#<th>Monto</th>
+                <th >Abono</th>#}
                 <th>Saldo</th>
-                <th>Estado</th>
+                {#<th>Estado</th>#}
                 <th>Actions</th>
             </tr>
         </thead>
@@ -154,11 +154,11 @@ loadTable('factura-table', [{{entity.emisor.ruc}}, {{entity.cliente.nombre}}, {{
                 <td HEIGHT="2">{{ entity.secuencial }}</td>
                 <td HEIGHT="2">{{entity.nroCuota}}</td>
                 <td HEIGHT="2">{{ entity.fechaEmision|date('d-m-Y') }}</td>
-                <td HEIGHT="2">{% if entity.fechaVencimiento|date('d-m-Y')>"now"|date("d-m-Y") %}{{entity.fechaVencimiento|date('d-m-Y')}}{% else %}<button disabled="disabled" class="btn btn-danger link-boton">{{entity.fechaVencimiento|date('d-m-Y')}}</button>{% endif%}</td>{#{{ entity.fechaVencimiento|date('d-m-Y') }}</td>#}
-                <td HEIGHT="2">{{ entity.monto }}</td>
-                <td HEIGHT="2" class="ruc1">{{ entity.abono }}</td>
+                <td HEIGHT="2" id="cell">{% if entity.fechaVencimiento|date('d-m-Y')>"now"|date("d-m-Y") %}{{entity.fechaVencimiento|date('d-m-Y')}}{% else %}<button disabled="disabled" class="btn btn-danger link-boton">{{entity.fechaVencimiento|date('d-m-Y')}}</button>{% endif%}</td>{#{{ entity.fechaVencimiento|date('d-m-Y') }}</td>#}
+                {#<td HEIGHT="2">{{ entity.monto }}</td>
+                <td HEIGHT="2" >{{ entity.abono }}</td>#}
                 <td HEIGHT="2" id="sal">{{ entity.saldo }}</td>
-                <td HEIGHT="2">{%if entity.estadoCuenta =="CANCELADO" %}<button disabled="disabled" class="btn btn-success link-boton">CANCELADO</button>{%else%}<button disabled="disabled" class="btn btn-danger link-boton">PENDIENTE</button>{% endif%}</td>
+                {#<td HEIGHT="2">{%if entity.estadoCuenta =="CANCELADO" %}<button disabled="disabled" class="btn btn-success link-boton">CANCELADO</button>{%else%}<button disabled="disabled" class="btn btn-danger link-boton">PENDIENTE</button>{% endif%}</td>#}
                 <td HEIGHT="2">
                     {#<a href="{{ path('form_edit', { 'id': entity.id }) }}" title="Editar">
                         <button class="btn btn-primary link-boton">
@@ -190,12 +190,30 @@ loadTable('factura-table', [{{entity.emisor.ruc}}, {{entity.cliente.nombre}}, {{
         </tbody>
     
     </table>
-    <div id="total">
-    <label for="inputEmail3" class="col-sm-2 col-form-label" style="margin-top: 0.7rem;">TOTAL:</label>
-    <input type="text" id="sum" class="form-control mr-sm-8" placeholder="0.00" disabled>
+    <div class="row" style="margin-top:2rem">
+        <div class="col-lg-4">
+            <div class="form-group row">
+                <label for="inputEmail3" class="col-sm-2 col-form-label" style="margin-top: 0.7rem;">TOTAL:</label>
+                <div class="col-sm-8">
+                    <input type="text" id="sum" class="form-control mr-sm-8" placeholder="0.00" disabled>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputEmail3" class="col-sm-2 col-form-label" style="margin-top: 0.7rem;">TOTAL VENCIDO:</label>
+                <div class="col-sm-8">
+                
+                <input type="text" id="sum1" class="form-control mr-sm-8" placeholder="0.00" disabled>
+                
+            </div>
+        </div>
+    </div>
     </div>
         
+<script>
 
+    console.log({{fecha}});
+
+</script>
 
     {% endblock %}
    {% block javascript %}

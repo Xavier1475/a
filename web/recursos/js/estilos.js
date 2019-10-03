@@ -120,6 +120,22 @@ $("input:checkbox:checked").each(function() {
   });
   $('#sum').val(t);  
 
+  
+  var f = new Date();
+  var s=f.getDate() + "-" + (f.getMonth() +1) + "-" + f.getFullYear();
+  var to = document.getElementById('factura-table');
+  var val1 = $(to.rows[1].cells[5]).text();
+  if(val1<s){
+    var val2=$(to.rows[1].cells[8]).text();
+    console.log(val2);
+    $('#sum1').val(val2);
+  }else{
+    console.log(val1);
+
+    $('#sum1').val(val1); 
+  }
+  
+
 
 function des(){
     /*
@@ -152,8 +168,9 @@ $("input:checkbox:checked").each(function() {
       $(this).closest('tr').remove();
       resta =total-$('#form_totalSinImpuestos').val();
     });
+    
     var f = new Date();
-    var tds='<td>000000011</td><td>1</td><TD>11-10-2019</td><TD>3</td><TD>5</td><td>6</td><td></td><td><input type="checkbox"><td>';
+    var tds='<td>000000011</td><td>1</td><TD>11-10-2019</td><TD>3</td><TD>5</td><td>2</td><td>6</td><td><input type="checkbox"><td>';
     var fec=tds.replace("3",f.getDate()+"-"+ (f.getMonth() +1) + "-" + f.getFullYear());
     var res=fec.replace("6",resta);
     document.getElementById("factura-table").insertRow(-1).innerHTML = res;

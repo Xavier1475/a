@@ -66,7 +66,7 @@ total=0
 $("input:checkbox:checked").each(function() {
    var count = Number($(this).val());
    total += count;
-   $('#form_totalSinImpuestos').val(total);
+   $('#form_monto').val(total);
 });
 
 }
@@ -118,20 +118,20 @@ $("input:checkbox:checked").each(function() {
     t += parseFloat($(this).text()); 
      
   });
+  console.log(t);
   $('#sum').val(t);  
 
   
   var f = new Date();
   var s=f.getDate() + "-" + (f.getMonth() +1) + "-" + f.getFullYear();
   var to = document.getElementById('factura-table');
-  var val1 = $(to.rows[1].cells[5]).text();
+  var val1 = $(to.rows[1].cells[6]).text();
   if(val1<s){
     var val2=$(to.rows[1].cells[8]).text();
     console.log(val2);
     $('#sum1').val(val2);
   }else{
     console.log(val1);
-
     $('#sum1').val(val1); 
   }
   

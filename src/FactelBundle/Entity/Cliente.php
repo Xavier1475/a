@@ -109,6 +109,18 @@ class Cliente {
     }
 
     /**
+     * Set id
+     *
+     * @param integer $id
+     * @return Cliente
+     */
+    public function setId($id) {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
      * Set nombre
      *
      * @param string $nombre
@@ -119,6 +131,7 @@ class Cliente {
 
         return $this;
     }
+  
 
     /**
      * Get nombre

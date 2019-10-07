@@ -11,6 +11,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use FactelBundle\Entity\Factura;
 use FactelBundle\Entity\Cliente;
+use FactelBundle\Entity\Emisor;
+use FactelBundle\Entity\Establecimiento;
+use FactelBundle\Entity\PtoEmision;
 use FactelBundle\Entity\FacturaHasProducto;
 use FactelBundle\Entity\Impuesto;
 use FactelBundle\Entity\CampoAdicional;
@@ -102,8 +105,18 @@ class FacturaController extends Controller {
         */
 
         //return new Response($post_data, 200, array('Content-Type' => 'application/json'));
-        
+        $em = $this->getDoctrine()->getEntityManager();
         $usu= new Factura();
+       /* $cli= new Cliente();
+        $emi= new Emisor();
+        $estab= new Establecimiento();
+        $em= $this->getDoctrine()->getManager();
+        $pto= $em->getRepository('FactelBundle:PtoEmision')->findIdPtoEmisionByUsuario($this->get("security.context")->gettoken()->getuser()->getId());
+        $usu->setCliente($cli->setId(9));
+        $usu->setEmisor($emi->setRuc('0301568283001'));
+        $usu->setEstablecimiento($estab->setNombre('matriz'));
+        $usu->setPtoEmision($pto->setNombre('CAJA'));*/
+        $em = $this->getDoctrine()->getEntityManager();
         
         $form= $this->createFormBuilder($usu)
                     //->setAction($this->generateUrl('save_animal'))
@@ -146,15 +159,12 @@ class FacturaController extends Controller {
                         'required' => true,
                     ))   
 
+                  
                     ->add('ctaContable','text',array(
                         'label'=>'Cuenta Contable',
                         'required' => true,
                     ))
-                    ->add('ctaContable','text',array(
-                        'label'=>'Cuenta Contable',
-                        'required' => true,
-                    ))
-                    ->add('totalSinImpuestos', 'text', array(
+                    ->add('monto', 'text', array(
                         'label'=>'Valor',
                         'required' => true,
                         'post_max_size_message'=>'6'
@@ -166,9 +176,13 @@ class FacturaController extends Controller {
                         'label'=>'Descuento',
                         
                     ))
-                    
+                    ->add('Enviar','submit')
                     ->getForm();
-                    $form->get('formaPago')->getData();
+  
+        
+        
+                    
+                    
                     $deleteForms = array();
                     /*$personas = $this->getDoctrine()
                     ->getRepository(Factura::class)
@@ -176,8 +190,12 @@ class FacturaController extends Controller {
                     $personas = $this->getDoctrine()
                     ->getRepository(Factura::class)
                     ->findCuentas();
-                        $fact= new Factura();
-                        $s=$fact->getFechaVencimiento();
+
+                        
+                        
+
+                    
+                        
                     /*$fact = $this->getDoctrine()
                     ->getRepository(Factura::class)
                     ->findCuentas();
@@ -196,7 +214,7 @@ class FacturaController extends Controller {
                             'form' => $form->createView(),
                             'entities' => $personas,
                             'deleteForms' => $deleteForms,
-                            'fecha'=> $s
+                            
                         ));
     }
     /*
@@ -224,7 +242,8 @@ class FacturaController extends Controller {
     public function editForm($id)
         
     {
-        $valor=$this->getDoctrine()
+       
+        /*$valor=$this->getDoctrine()
                     ->getRepository(Factura::class)
                     ->findSaldo($id);
 
@@ -255,6 +274,10 @@ class FacturaController extends Controller {
         $form->add('submit', 'submit', array('label' => 'Update'));
 
         return $form;*/
+        $n="<script>alert('hola')</script>";
+        return new Response($n);
+        
+        
         
     }
               

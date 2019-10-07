@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-10-2019 a las 23:32:26
+-- Tiempo de generación: 07-10-2019 a las 23:34:44
 -- Versión del servidor: 10.4.6-MariaDB
 -- Versión de PHP: 7.3.9
 
@@ -27,8 +27,15 @@ DELIMITER $$
 -- Procedimientos
 --
 CREATE DEFINER=`root`@`localhost` PROCEDURE `saldos` (IN `abon` DECIMAL(11,2))  BEGIN
-SELECT IF(SUM(saldo)>abon,SUM(saldo)-abon,'n') as total
+SELECT monto,abono,saldo,IF(SUM(saldo)>abon,SUM(saldo)-abon,SUM(saldo)) as total
 from factura;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `saldo_update` (IN `abon` DECIMAL(11,2))  NO SQL
+BEGIN
+UPDATE factura 
+set abono=if(monto>abon,abono+abon,monto=0)
+WHERE saldo>0;
 END$$
 
 DELIMITER ;
@@ -282,11 +289,11 @@ CREATE TABLE `factura` (
 --
 
 INSERT INTO `factura` (`id`, `cliente_id`, `emisor_id`, `establecimiento_id`, `claveAcceso`, `numeroAutorizacion`, `fechaAutorizacion`, `estado`, `ambiente`, `tipoEmision`, `secuencial`, `formaPago`, `fechaEmision`, `nombreArchivo`, `totalSinImpuestos`, `subtotal12`, `subtotal0`, `subtotalNoIVA`, `subtotalExentoIVA`, `valorICE`, `valorIRBPNR`, `iva12`, `totalDescuento`, `propina`, `valorTotal`, `nroCuota`, `monto`, `fechaVencimiento`, `ctaContable`, `nroCuenta`, `banco`, `abono`, `saldo`, `estadoCuenta`, `firmado`, `enviarSiAutorizado`, `observacion`, `createdAt`, `updatedAt`, `ptoEmision_id`, `createdBy_id`, `updatedBy_id`, `deletedBy_id`) VALUES
-(17, 9, 5, 5, '1408201901030156828300120010010000000001234567814', '1408201901030156828300120010010000000001234567814', '2019-08-14 07:02:46', 'AUTORIZADO', '2', '1', '000000000', '01', '2019-08-14', 'FAC001-001-000000000', '1.00', '1.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.12', '0.10', '0.00', '1.12', 5, '150.25', '2019-10-23', 0, 0, '', '148.28', '1.97', 'PENDIENTE', 1, 1, '', '2019-08-14 14:02:10', '2019-08-14 14:02:56', 5, 6, 6, NULL),
-(18, 9, 5, 5, '1408201901030156828300120010010000000011234567811', '1408201901030156828300120010010000000011234567811', '2019-08-14 09:43:05', 'AUTORIZADO', '2', '1', '000000001', '20', '2019-08-14', 'FAC001-001-000000001', '1.00', '1.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.12', '0.00', '0.00', '1.12', 4, '15.25', '2019-10-09', 0, 0, '', '2.00', '13.25', 'PENDIENTE', 1, 0, 'PAGO LAPTOP', '2019-08-14 16:42:49', '2019-08-14 16:43:14', 5, 6, 6, NULL),
-(19, 9, 5, 5, '2308201901030156828300110010010000000021234567816', '2308201901030156828300110010010000000021234567816', '2019-08-23 03:08:18', 'AUTORIZADO', '1', '1', '000000002', '20', '2019-08-23', 'FAC001-001-000000002', '1.00', '1.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.12', '0.00', '0.00', '1.12', 3, '19.75', '2019-10-04', 0, 0, '', '18.00', '1.75', 'PENDIENTE', 1, 1, 'TODO OKay', '2019-08-23 22:05:40', '2019-08-23 22:09:23', 5, 6, 6, NULL),
+(17, 9, 5, 5, '1408201901030156828300120010010000000001234567814', '1408201901030156828300120010010000000001234567814', '2019-08-14 07:02:46', 'AUTORIZADO', '2', '1', '000000000', '01', '2019-08-14', 'FAC001-001-000000000', '1.00', '1.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.12', '0.10', '0.00', '1.12', 5, '150.25', '2019-10-23', 0, 0, '', '0.97', '149.28', 'PENDIENTE', 1, 1, '', '2019-08-14 14:02:10', '2019-08-14 14:02:56', 5, 6, 6, NULL),
+(18, 9, 5, 5, '1408201901030156828300120010010000000011234567811', '1408201901030156828300120010010000000011234567811', '2019-08-14 09:43:05', 'AUTORIZADO', '2', '1', '000000001', '20', '2019-08-14', 'FAC001-001-000000001', '1.00', '1.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.12', '0.00', '0.00', '1.12', 4, '15.25', '2019-10-09', 0, 0, '', '12.25', '3.00', 'PENDIENTE', 1, 0, 'PAGO LAPTOP', '2019-08-14 16:42:49', '2019-08-14 16:43:14', 5, 6, 6, NULL),
+(19, 9, 5, 5, '2308201901030156828300110010010000000021234567816', '2308201901030156828300110010010000000021234567816', '2019-08-23 03:08:18', 'AUTORIZADO', '1', '1', '000000002', '20', '2019-08-23', 'FAC001-001-000000002', '1.00', '1.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.12', '0.00', '0.00', '1.12', 3, '19.75', '2019-10-08', 0, 0, '', '0.75', '19.00', 'PENDIENTE', 1, 1, 'TODO OKay', '2019-08-23 22:05:40', '2019-08-23 22:09:23', 5, 6, 6, NULL),
 (20, 9, 5, 5, '2509201901030156828300110010010000000031234567817', NULL, NULL, 'CREADA', '1', '1', '000000003', '15', '2019-09-25', NULL, '1.00', '1.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.12', '0.00', '0.00', '1.12', 2, '19.50', '2019-10-03', 0, 0, '', '19.50', '0.00', 'CANCELADO', 0, 0, 'eemplo', '2019-09-16 18:24:31', '2019-09-16 18:24:31', 5, 6, 6, NULL),
-(59, 9, 5, 5, '', NULL, '2019-10-09 00:00:00', '', '', '', '00000014', '', '2019-10-16', NULL, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 1, '20.00', '2019-10-02', 0, 0, '', '0.00', '20.00', 'PENDIENTE', 0, 0, NULL, NULL, NULL, 5, 6, NULL, NULL);
+(59, 9, 5, 5, '', NULL, '2019-10-09 00:00:00', '', '', '', '00000014', '', '2019-10-16', NULL, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 1, '20.00', '2019-10-02', 0, 0, '', '19.00', '1.00', 'PENDIENTE', 0, 0, NULL, NULL, NULL, 5, 6, NULL, NULL);
 
 --
 -- Disparadores `factura`
@@ -366,6 +373,25 @@ CREATE TABLE `formapago` (
   `id` int(11) NOT NULL,
   `descrpFormaPago` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `grupo`
+--
+
+CREATE TABLE `grupo` (
+  `id` int(11) NOT NULL,
+  `nombGrupo` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `grupo`
+--
+
+INSERT INTO `grupo` (`id`, `nombGrupo`) VALUES
+(1, 'GRUPO'),
+(2, 'MOVIMIENTO');
 
 -- --------------------------------------------------------
 
@@ -562,6 +588,26 @@ CREATE TABLE `mensaje` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `moneda`
+--
+
+CREATE TABLE `moneda` (
+  `id` int(11) NOT NULL,
+  `nombMoneda` varchar(100) NOT NULL,
+  `valor` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `moneda`
+--
+
+INSERT INTO `moneda` (`id`, `nombMoneda`, `valor`) VALUES
+(1, 'Dolares', 0),
+(2, 'Extranjera', 0);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `motivo`
 --
 
@@ -700,6 +746,25 @@ INSERT INTO `plan` (`id`, `cantComprobante`, `precio`, `periodo`, `observaciones
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `plancuentas`
+--
+
+CREATE TABLE `plancuentas` (
+  `id` int(11) NOT NULL,
+  `idempresa` int(11) NOT NULL,
+  `codCta` int(11) NOT NULL,
+  `tipoCta` int(11) NOT NULL,
+  `codMoneda` int(11) NOT NULL,
+  `flujoCaja` varchar(100) NOT NULL,
+  `bansel` varchar(50) NOT NULL,
+  `grupo` int(11) NOT NULL,
+  `codUsu` int(11) NOT NULL,
+  `fechaCreacion` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `producto`
 --
 
@@ -814,6 +879,29 @@ INSERT INTO `role` (`id`, `nombre`, `createdAt`, `updatedAt`, `createdBy_id`, `u
 (1, 'ROLE_EMISOR_ADMIN', '2018-09-08 12:32:12', '2018-09-08 12:32:12', NULL, NULL, NULL),
 (2, 'ROLE_ADMIN', '2018-09-08 12:32:28', '2018-09-08 12:32:28', NULL, NULL, NULL),
 (3, 'ROLE_EMISOR', '2018-09-08 12:32:39', '2018-09-08 12:32:39', NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tipocuenta`
+--
+
+CREATE TABLE `tipocuenta` (
+  `id` int(11) NOT NULL,
+  `nombreCuenta` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `tipocuenta`
+--
+
+INSERT INTO `tipocuenta` (`id`, `nombreCuenta`) VALUES
+(1, 'ACTIVO'),
+(2, 'ACTIVO CORRIENTE'),
+(3, 'EFECTIVO Y EQUIVALENTES AL EFECTIVO'),
+(4, 'CAJA'),
+(5, 'CAJA GENERAL'),
+(6, 'CAJA CHICA');
 
 -- --------------------------------------------------------
 
@@ -941,6 +1029,12 @@ ALTER TABLE `formapago`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `grupo`
+--
+ALTER TABLE `grupo`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `guia`
 --
 ALTER TABLE `guia`
@@ -1016,6 +1110,12 @@ ALTER TABLE `mensaje`
   ADD KEY `IDX_54DE249DC9979183` (`Guia_id`);
 
 --
+-- Indices de la tabla `moneda`
+--
+ALTER TABLE `moneda`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `motivo`
 --
 ALTER TABLE `motivo`
@@ -1063,6 +1163,17 @@ ALTER TABLE `plan`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `plancuentas`
+--
+ALTER TABLE `plancuentas`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idempresa` (`idempresa`),
+  ADD KEY `codMoneda` (`codMoneda`),
+  ADD KEY `grupo` (`grupo`),
+  ADD KEY `codUsu` (`codUsu`),
+  ADD KEY `tipoCta` (`tipoCta`);
+
+--
 -- Indices de la tabla `producto`
 --
 ALTER TABLE `producto`
@@ -1107,6 +1218,12 @@ ALTER TABLE `role`
   ADD KEY `IDX_F75B25543174800F` (`createdBy_id`),
   ADD KEY `IDX_F75B255465FF1AEC` (`updatedBy_id`),
   ADD KEY `IDX_F75B255463D8C20E` (`deletedBy_id`);
+
+--
+-- Indices de la tabla `tipocuenta`
+--
+ALTER TABLE `tipocuenta`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `user`
@@ -1169,7 +1286,7 @@ ALTER TABLE `establecimiento`
 -- AUTO_INCREMENT de la tabla `factura`
 --
 ALTER TABLE `factura`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT de la tabla `facturahasproducto`
@@ -1182,6 +1299,12 @@ ALTER TABLE `facturahasproducto`
 --
 ALTER TABLE `formapago`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `grupo`
+--
+ALTER TABLE `grupo`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `guia`
@@ -1232,6 +1355,12 @@ ALTER TABLE `mensaje`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
+-- AUTO_INCREMENT de la tabla `moneda`
+--
+ALTER TABLE `moneda`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT de la tabla `motivo`
 --
 ALTER TABLE `motivo`
@@ -1262,6 +1391,12 @@ ALTER TABLE `plan`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT de la tabla `plancuentas`
+--
+ALTER TABLE `plancuentas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
@@ -1284,6 +1419,12 @@ ALTER TABLE `retencion`
 --
 ALTER TABLE `role`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `tipocuenta`
+--
+ALTER TABLE `tipocuenta`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `user`
@@ -1468,6 +1609,16 @@ ALTER TABLE `notadebito`
   ADD CONSTRAINT `FK_6094767071B61351` FOREIGN KEY (`establecimiento_id`) REFERENCES `establecimiento` (`id`),
   ADD CONSTRAINT `FK_60947670DE734E51` FOREIGN KEY (`cliente_id`) REFERENCES `cliente` (`id`),
   ADD CONSTRAINT `FK_60947670E01B1B5E` FOREIGN KEY (`ptoEmision_id`) REFERENCES `ptoemision` (`id`);
+
+--
+-- Filtros para la tabla `plancuentas`
+--
+ALTER TABLE `plancuentas`
+  ADD CONSTRAINT `plancuentas_ibfk_1` FOREIGN KEY (`idempresa`) REFERENCES `emisor` (`id`),
+  ADD CONSTRAINT `plancuentas_ibfk_2` FOREIGN KEY (`codMoneda`) REFERENCES `moneda` (`id`),
+  ADD CONSTRAINT `plancuentas_ibfk_3` FOREIGN KEY (`grupo`) REFERENCES `grupo` (`id`),
+  ADD CONSTRAINT `plancuentas_ibfk_4` FOREIGN KEY (`codUsu`) REFERENCES `user` (`id`),
+  ADD CONSTRAINT `plancuentas_ibfk_5` FOREIGN KEY (`tipoCta`) REFERENCES `tipocuenta` (`id`);
 
 --
 -- Filtros para la tabla `producto`
